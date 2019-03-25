@@ -69,7 +69,7 @@ playerConnectionsRef.on("value", function (snapshot) {
 $("#submit-btn").on("click", function (event) {
   event.preventDefault();
 
-  count++;
+
   let playersChoice = $("#choice-input").val().trim();
   console.log('player choice', playersChoice)
   // Get key value
@@ -80,7 +80,7 @@ $("#submit-btn").on("click", function (event) {
     choice: playersChoice,
     wins: 0
   });
-
+  $("#choice-input").val("")
 });
 
 // Check players choices
@@ -123,24 +123,36 @@ database.ref().on("child_changed", function (snapshot) {
     (firstResponse === "paper" && secondResponse === "rock")
   ) {
     console.log(`${firstResponse} wins`)
-    // winsOne++
+    winsOne++
     // Update wins count in Firebase database;
-    console.log('update wins: ', winsOne)
-    database.ref('/playerConnections/' + firstKey + '/player/').update({
-      wins: winsOne
-    });
+    console.log('update One wins: ', winsOne)
+    // database.ref('/playerConnections/' + firstKey + '/player/').update({
+    //   wins: winsOne
+    // });
 
   } else if (firstResponse === secondResponse) {
     console.log("tie")
     ties++
   } else {
     console.log(`${secondResponse} wins`)
-    // wins++
+    winsTwo++
     // Update wins count in Firebase database;
-    console.log('update wins: ', winsTwo)
-    database.ref('/playerConnections/' + secondKey + '/player/').update({
-      wins: winsTwo
-    });
+    console.log('update Two wins: ', winsTwo)
+    // database.ref('/playerConnections/' + secondKey + '/player/').update({
+    //   wins: winsTwo
+    // });
 
   }
+  // Update wins count and clear prior player choice
+  console.log('update count', winsOne, winsTwo)
+  database.ref('/playerConnections/' + firstKey + '/player/').set({
+    choice: '',
+    wins: winsOne
+  });
+
+  database.ref('/playerConnections/' + secondKey + '/player/').set({
+    choice: '',
+    wins: winsTwo
+  });
+
 })
