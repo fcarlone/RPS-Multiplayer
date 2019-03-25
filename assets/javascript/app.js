@@ -101,8 +101,16 @@ database.ref().on("child_changed", function (snapshot) {
   // Get players' response 
   let firstResponseKey = gameObj[Object.keys(gameObj)[0]];
   let secondResponseKey = gameObj[Object.keys(gameObj)[1]];
+
   let firstResponse = gameObj[Object.keys(gameObj)[0]][0];
   let secondResponse = gameObj[Object.keys(gameObj)[1]][0];
+
+  let firstResponseWins = gameObj[Object.keys(gameObj)[0]][1];
+  let secondResponseWins = gameObj[Object.keys(gameObj)[1]][1];
+  // Update global variable wins count
+  winsOne = firstResponseWins
+  winsTwo = secondResponseWins
+
   let firstKey = Object.keys(gameObj).find(key => gameObj[key] === firstResponseKey);
   let secondKey = Object.keys(gameObj).find(key => gameObj[key] === secondResponseKey);
 
@@ -115,15 +123,24 @@ database.ref().on("child_changed", function (snapshot) {
     (firstResponse === "paper" && secondResponse === "rock")
   ) {
     console.log(`${firstResponse} wins`)
-    winsOne++
-
+    // winsOne++
     // Update wins count in Firebase database;
+    console.log('update wins: ', winsOne)
+    database.ref('/playerConnections/' + firstKey + '/player/').update({
+      wins: winsOne
+    });
 
   } else if (firstResponse === secondResponse) {
     console.log("tie")
     ties++
   } else {
     console.log(`${secondResponse} wins`)
-    winsTwo++
+    // wins++
+    // Update wins count in Firebase database;
+    console.log('update wins: ', winsTwo)
+    database.ref('/playerConnections/' + secondKey + '/player/').update({
+      wins: winsTwo
+    });
+
   }
 })
