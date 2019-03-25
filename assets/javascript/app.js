@@ -80,7 +80,11 @@ $("#submit-btn").on("click", function (event) {
     choice: playersChoice,
     wins: 0
   });
+  $("#submit-btn").addClass("disabled")
+  $("#submit-btn").hide()
   $("#choice-input").val("")
+  $("#player-message").text(`You selected ${playersChoice}`)
+
 });
 
 // Check players choices
