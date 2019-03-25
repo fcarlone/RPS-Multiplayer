@@ -20,6 +20,7 @@ let gameObj = {};
 let count = 0;
 let winsOne = 0
 let winsTwo = 0;
+let ties = 0;
 
 // Firebase database reference
 let database = firebase.database();
@@ -76,7 +77,8 @@ $("#submit-btn").on("click", function (event) {
 
   // Update Firebase database with player's choice
   database.ref(currentPath + "/player/").update({
-    choice: playersChoice
+    choice: playersChoice,
+    wins: 0
   });
 
 });
@@ -88,26 +90,40 @@ database.ref().on("child_changed", function (snapshot) {
 
     // Store in object to apply game logic
     let objKey = childSnapshot.key
-    console.log(childSnapshot.val().player.choice)
-    let objValue = childSnapshot.val().player.choice
-    Object.assign(gameObj, { [objKey]: objValue })
+    let objValueChoice = childSnapshot.val().player.choice
+    let objValueWins = childSnapshot.val().player.wins
+    // Add player's choice and wins to game object
+    Object.assign(gameObj, { [objKey]: [objValueChoice, objValueWins] })
     console.log("object", gameObj)
+
   });
   // Add game logic
   // Get players' response 
-  let firstResponse = gameObj[Object.keys(gameObj)[0]];
-  let secondResponse = gameObj[Object.keys(gameObj)[1]];
+  let firstResponseKey = gameObj[Object.keys(gameObj)[0]];
+  let secondResponseKey = gameObj[Object.keys(gameObj)[1]];
+  let firstResponse = gameObj[Object.keys(gameObj)[0]][0];
+  let secondResponse = gameObj[Object.keys(gameObj)[1]][0];
+  let firstKey = Object.keys(gameObj).find(key => gameObj[key] === firstResponseKey);
+  let secondKey = Object.keys(gameObj).find(key => gameObj[key] === secondResponseKey);
+
   console.log('player response', firstResponse, secondResponse)
+  console.log('player response', firstKey, secondKey)
 
   if (
     (firstResponse === "rock" && secondResponse === "scissors") ||
     (firstResponse === "scissors" && secondResponse === "paper") ||
     (firstResponse === "paper" && secondResponse === "rock")
   ) {
+    console.log(`${firstResponse} wins`)
     winsOne++
+
+    // Update wins count in Firebase database;
+
   } else if (firstResponse === secondResponse) {
+    console.log("tie")
     ties++
   } else {
+    console.log(`${secondResponse} wins`)
     winsTwo++
   }
 })
