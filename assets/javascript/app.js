@@ -18,6 +18,8 @@ let currentPath;
 let tempKey;
 let gameObj = {};
 let count = 0;
+let winsOne = 0
+let winsTwo = 0;
 
 // Firebase database reference
 let database = firebase.database();
@@ -79,17 +81,33 @@ $("#submit-btn").on("click", function (event) {
 
 });
 
-
 // Check players choices
 database.ref().on("child_changed", function (snapshot) {
   snapshot.forEach((childSnapshot) => {
     console.log('key', childSnapshot.key)
+
+    // Store in object to apply game logic
     let objKey = childSnapshot.key
     console.log(childSnapshot.val().player.choice)
     let objValue = childSnapshot.val().player.choice
     Object.assign(gameObj, { [objKey]: objValue })
     console.log("object", gameObj)
   });
+  // Add game logic
+  // Get players' response 
+  let firstResponse = gameObj[Object.keys(gameObj)[0]];
+  let secondResponse = gameObj[Object.keys(gameObj)[1]];
+  console.log('player response', firstResponse, secondResponse)
 
-
+  if (
+    (firstResponse === "rock" && secondResponse === "scissors") ||
+    (firstResponse === "scissors" && secondResponse === "paper") ||
+    (firstResponse === "paper" && secondResponse === "rock")
+  ) {
+    winsOne++
+  } else if (firstResponse === secondResponse) {
+    ties++
+  } else {
+    winsTwo++
+  }
 })
