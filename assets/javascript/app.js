@@ -15,6 +15,9 @@ let playersKeyArray = [];
 let playerKey1;
 let playerKey2;
 let currentPath;
+let tempKey;
+let gameObj = {};
+let count = 0;
 
 // Firebase database reference
 let database = firebase.database();
@@ -47,17 +50,46 @@ playerConnectionsRef.on("value", function (snapshot) {
   // Get the number of players/children in the connections list and display on app
   $("#connection-watch").text(`No. of connections ${snapshot.numChildren()}`)
   console.log('snapshot value', snapshot.val());
+  console.log('snapshot key', snapshot.key);
+
+  snapshot.forEach((childSnapshot) => {
+    console.log(childSnapshot.key)
+    tempKey = childSnapshot.key
+    if (!playersKeyArray.includes(childSnapshot.key)) {
+      playersKeyArray.unshift(childSnapshot.key)
+    }
+
+  })
 })
 
 
 $("#submit-btn").on("click", function (event) {
   event.preventDefault();
 
+  count++;
   let playersChoice = $("#choice-input").val().trim();
   console.log('player choice', playersChoice)
+  // Get key value
+  console.log('temp key', tempKey)
 
   // Update Firebase database with player's choice
   database.ref(currentPath + "/player/").update({
     choice: playersChoice
-  })
+  });
+
 });
+
+
+// Check players choices
+database.ref().on("child_changed", function (snapshot) {
+  snapshot.forEach((childSnapshot) => {
+    console.log('key', childSnapshot.key)
+    let objKey = childSnapshot.key
+    console.log(childSnapshot.val().player.choice)
+    let objValue = childSnapshot.val().player.choice
+    Object.assign(gameObj, { [objKey]: objValue })
+    console.log("object", gameObj)
+  });
+
+
+})
