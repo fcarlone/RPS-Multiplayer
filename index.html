@@ -17,14 +17,12 @@
 </head>
 
 <body>
-  <h1>Rock Paper Scissors</h1>
 
   <!-- App Container -->
   <div class="app-container">
-
     <!-- Header -->
     <div class="header"></div>
-
+    <h1>Rock Paper Scissors</h1>
     <!-- Game Instructions -->
 
     <!-- Game Messages -->
@@ -34,8 +32,10 @@
     <!-- Player -->
     <div class="player-container">
       <p id="player-message"></p>
+      <p id="game-message"></p>
+      <p id="result-message"></p>
     </div>
-    <form>
+    <form id="choice-form">
       <div class="form-group">
         <label for="choiceData"></label>
         <input type="text" id="choice-input">
@@ -45,7 +45,12 @@
 
 
     <!-- Scoreboard -->
-
+    <div class="scoreboard-container">
+      <p class="scoreboard">Scoreboard</p>
+      <p id="player-one-wins">Player One wins: 0</p>
+      <p id="player-two-wins">Player Two wins: 0</p>
+      <p id="ties">Ties: 0</p>
+    </div>
   </div>
 
   <!-- JavaScript Files -->
