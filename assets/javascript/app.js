@@ -21,7 +21,6 @@ let ties = 0;
 // Inital setup
 $("#game-message").text("Game is Ready")
 
-
 // Firebase database reference
 let database = firebase.database();
 
@@ -43,8 +42,9 @@ connectedRef.on("value", function (snapshot) {
     currentPath = String(con.path)
     console.log('currentPath', currentPath)
     // show player connection
-    $("#player-connection").text(con.path)
+    // $("#player-connection").text(con.path)
   }
+
 });
 
 // On first load or change to connections list
@@ -53,6 +53,23 @@ playerConnectionsRef.on("value", function (snapshot) {
   $("#connection-watch").text(`Number of players: ${snapshot.numChildren()}`)
   console.log('snapshot value', snapshot.val());
 
+  if (snapshot.numChildren() === 0) {
+    $("#game-message").text("You are disconnected from the game.")
+    $(".choice-form").hide()
+    $(".scoreboard-container").hide()
+  } else if (snapshot.numChildren() === 1) {
+    $("#game-message").text("Waiting for second player.")
+    $(".choice-form").hide()
+    $(".scoreboard-container").hide()
+  } else if (snapshot.numChildren() === 2) {
+    $("#game-message").text("Game is ready.  Make your selection.")
+    $(".choice-form").show(1000);
+    $(".scoreboard-container").show(1500)
+  }
+
+  if (snapshot.numChildren() >= 3) {
+    console.log("remove user")
+  }
   snapshot.forEach((childSnapshot) => {
     console.log(childSnapshot.key)
     tempKey = childSnapshot.key
@@ -122,7 +139,7 @@ database.ref().on("child_changed", function (snapshot) {
     console.log(`${playerOneKey} ${playerOneChoice} wins`)
     playerOneWins++
     // Update scoreboard
-    $("#player-one-wins").text(`Player One wins: ${playerOneWins}`)
+    $("#player-one-wins").text(`Player one wins: ${playerOneWins}`)
     $("#game-message").text(`${playerOneChoice} wins`)
     // show submit button;
     $("#submit-btn").show()
@@ -138,7 +155,7 @@ database.ref().on("child_changed", function (snapshot) {
     console.log(`${playerTwoKey} ${playerTwoChoice} wins`)
     playerTwoWins++
     // Update scoreboard
-    $("#player-two-wins").text(`Player Two wins: ${playerTwoWins}`)
+    $("#player-two-wins").text(`Player two wins: ${playerTwoWins}`)
     $("#game-message").text(`${playerTwoChoice} wins`)
     // show submit button;
     $("#submit-btn").show()

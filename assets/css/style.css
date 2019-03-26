@@ -1,3 +1,52 @@
+body {
+  background: rgb(209, 212, 212) !important;
+}
+
 .app-container {
-  margin: 100px
+  margin: 50px;
+
+}
+
+.header {
+  background-color: #557A95 !important;
+  color: white !important;
+}
+
+.dispaly-4 {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+#game-message {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.choice-form,
+.scoreboard-container {
+  border: lightgray solid 3px;
+  padding: 10px;
+  padding-bottom: 20px;
+  width: 600px;
+  background: white;
+  margin: auto;
+  font-family: 'Raleway', sans-serif;
+}
+
+#input-message {
+  font-weight: bolder;
+}
+
+.scoreboard-container {
+  font-family: 'Barlow', sans-serif;
+  /* font-family: 'Heebo', sans-serif; */
+  margin-top: 1.75rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.scoreboard-container .scoreboard {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bolder;
+  font-family: 'Roboto', sans-serif;
 }

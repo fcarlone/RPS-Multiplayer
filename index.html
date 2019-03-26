@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <!-- jQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Barlow|Heebo|Raleway|Roboto" rel="stylesheet">
   <!-- FireBase -->
   <script src="https://www.gstatic.com/firebasejs/5.9.0/firebase.js"></script>
 </head>
@@ -21,41 +23,44 @@
   <!-- App Container -->
   <div class="app-container">
     <!-- Header -->
-    <div class="header"></div>
-    <div class="jumbotron jumbotron-fluid">
-      <div class="container">
-        <h1 class="display-4">Rock Paper Scissors</h1>
-        <p class="lead">A two player online game</p>
+    <div class="header">
+      <div class="header jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4">Rock Paper Scissors Game</h1>
+          <p class="lead">A two player online game. Select rock, paper, or scissors and compare your selection against
+            the
+            other player.</p>
+        </div>
       </div>
     </div>
     <!-- Game Instructions -->
-    <h2>Your basic Rock Paper Scissors game</h2>
-    <h3>Select rock, paper, or scissors and compare your selection against the other player</h3>
     <!-- Game Messages -->
     <p id="connection-watch">No. of connections</p>
     <p id="player-connection"></p>
 
-    <!-- Player -->
-    <div class="player-container">
-      <p id="player-message"></p>
-      <p id="game-message"></p>
-      <p id="result-message"></p>
-    </div>
-    <p id="input-message">Enter your selection in the input box</p>
-    <form id="choice-form">
-      <div class="form-group">
-        <label for="choiceData"></label>
-        <input type="text" id="choice-input">
+    <!-- Player Message -->
+    <div class="input-container">
+      <div class="player-container">
+        <p id="player-message"></p>
+        <p id="game-message"></p>
+        <p id="result-message"></p>
       </div>
-      <button type="submit" id="submit-btn" class="btn btn-primary">Submit</button>
-    </form>
 
+      <form class="choice-form">
+        <p id="input-message">Enter your selection in the input box</p>
+        <div class="form-group">
+          <label for="choiceData"></label>
+          <input type="text" id="choice-input">
+        </div>
+        <button type="submit" id="submit-btn" class="btn btn-success">Submit</button>
+      </form>
+    </div>
 
     <!-- Scoreboard -->
     <div class="scoreboard-container">
       <p class="scoreboard">Scoreboard</p>
-      <p id="player-one-wins">Player One wins: 0</p>
-      <p id="player-two-wins">Player Two wins: 0</p>
+      <p id="player-one-wins">Player one wins: 0</p>
+      <p id="player-two-wins">Player two wins: 0</p>
       <p id="ties">Ties: 0</p>
     </div>
   </div>
