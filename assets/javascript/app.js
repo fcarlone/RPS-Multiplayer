@@ -18,6 +18,10 @@ let playerOneWins = 0;
 let playerTwoWins = 0;
 let ties = 0;
 
+// Inital setup
+$("#game-message").text("Game is Ready")
+
+
 // Firebase database reference
 let database = firebase.database();
 
@@ -26,7 +30,6 @@ let playerConnectionsRef = database.ref("/playerConnections/");
 
 // Check player connection ".info/connected"
 let connectedRef = database.ref(".info/connected");
-
 
 // Player connection state changes
 connectedRef.on("value", function (snapshot) {
@@ -111,7 +114,6 @@ database.ref().on("child_changed", function (snapshot) {
   console.log('player one', playerOneKey, playerOneChoice)
   console.log('player two', playerTwoKey, playerTwoChoice)
 
-
   if (
     (playerOneChoice === "rock" && playerTwoChoice === "scissors") ||
     (playerOneChoice === "scissors" && playerTwoChoice === "paper") ||
@@ -121,21 +123,28 @@ database.ref().on("child_changed", function (snapshot) {
     playerOneWins++
     // Update scoreboard
     $("#player-one-wins").text(`Player One wins: ${playerOneWins}`)
-
+    $("#game-message").text(`${playerOneChoice} wins`)
+    // show submit button;
+    $("#submit-btn").show()
   } else if (playerOneChoice === playerTwoChoice) {
     console.log("tie")
     ties++
     // Update scoreboard
     $("#ties").text(`Ties: ${ties}`)
+    $("#game-message").text(`Both players selected ${playerTwoChoice}`)
+    // show submit button;
+    $("#submit-btn").show()
   } else {
     console.log(`${playerTwoKey} ${playerTwoChoice} wins`)
     playerTwoWins++
     // Update scoreboard
     $("#player-two-wins").text(`Player Two wins: ${playerTwoWins}`)
+    $("#game-message").text(`${playerTwoChoice} wins`)
+    // show submit button;
+    $("#submit-btn").show()
   };
 
   console.log('Scoreboard:', playerOneWins, playerTwoWins, ties)
-
 
   // Remove player choice from Firebase database
   console.log('update current path', `${currentPath}/player/choice`)
@@ -152,8 +161,7 @@ database.ref().on("child_changed", function (snapshot) {
   console.log('game object', gameObj)
 
 
-  // show submit button;
-  $("#submit-btn").show()
+
 
 });
 
