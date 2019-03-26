@@ -28,7 +28,6 @@ let playerConnectionsRef = database.ref("/playerConnections/");
 let connectedRef = database.ref(".info/connected");
 
 
-
 // Player connection state changes
 connectedRef.on("value", function (snapshot) {
   // If player is connected
@@ -63,17 +62,30 @@ playerConnectionsRef.on("value", function (snapshot) {
 $("#submit-btn").on("click", function (event) {
   event.preventDefault();
 
-  let playersChoice = $("#choice-input").val().trim();
-  console.log('player choice', playersChoice)
-  // Get player's key value
-  console.log('player key', tempKey)
+  let playersChoice = $("#choice-input").val().trim().toLowerCase();
 
-  // Update Firebase database with player's choice
-  database.ref(currentPath + "/player/").update({
-    choice: playersChoice
-  });
-  // Set values
-  $("#choice-input").val(" ")
+  // Validate playerChoice 
+  console.log(typeof playersChoice)
+
+  console.log(playersChoice)
+  if (playersChoice !== "rock" && playersChoice !== "paper" && playersChoice !== "scissors") {
+    $("#game-message").text("Your enter an invalid name.  Please enter selection again.")
+    $("#choice-input").val(" ")
+  } else {
+    $("#game-message").text("")
+    console.log('player choice', playersChoice)
+    // Get player's key value
+    console.log('player key', tempKey)
+
+    // Update Firebase database with player's choice
+    database.ref(currentPath + "/player/").update({
+      choice: playersChoice
+    });
+    // Set values
+    $("#choice-input").val(" ")
+    // Hide submit button;
+    $("#submit-btn").hide()
+  }
 });
 
 // Get players choices from Firebase database
@@ -98,6 +110,7 @@ database.ref().on("child_changed", function (snapshot) {
 
   console.log('player one', playerOneKey, playerOneChoice)
   console.log('player two', playerTwoKey, playerTwoChoice)
+
 
   if (
     (playerOneChoice === "rock" && playerTwoChoice === "scissors") ||
@@ -124,17 +137,24 @@ database.ref().on("child_changed", function (snapshot) {
   console.log('Scoreboard:', playerOneWins, playerTwoWins, ties)
 
 
-
   // Remove player choice from Firebase database
-  // console.log('update current path', `${currentPath}/player/choice`)
+  console.log('update current path', `${currentPath}/player/choice`)
   // let location = database.ref(currentPath + '/player')
-  // location.child('choice').set(null)
+  // location.child('choice').update({ child: null })
   //   .then(function () {
   //     console.log('successful')
   //   })
 
-  gameObj = {};
+
+  playerOneChoice = null;
+  playerTwoChoice = null;
+  // gameObj = {};
   console.log('game object', gameObj)
 
+
+  // show submit button;
+  $("#submit-btn").show()
+
 });
+
 
