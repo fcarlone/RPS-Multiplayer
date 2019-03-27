@@ -18,8 +18,8 @@ let playerOneWins = 0;
 let playerTwoWins = 0;
 let ties = 0;
 
-// Inital setup
-$("#game-message").text("Game is Ready")
+// // Inital setup
+// $("#game-message").text("Game is Ready")
 
 // Firebase database reference
 let database = firebase.database();
@@ -44,7 +44,6 @@ connectedRef.on("value", function (snapshot) {
     // show player connection
     // $("#player-connection").text(con.path)
   }
-
 });
 
 // On first load or change to connections list
@@ -65,11 +64,10 @@ playerConnectionsRef.on("value", function (snapshot) {
     $("#game-message").text("Game is ready.  Make your selection.")
     $(".choice-form").show(1000);
     $(".scoreboard-container").show(1500)
-  }
-
-  if (snapshot.numChildren() >= 3) {
+  } else if (snapshot.numChildren() >= 3) {
     console.log("remove user")
-  }
+  };
+
   snapshot.forEach((childSnapshot) => {
     console.log(childSnapshot.key)
     tempKey = childSnapshot.key
@@ -103,8 +101,6 @@ $("#submit-btn").on("click", function (event) {
     });
     // Set values
     $("#choice-input").val(" ")
-    // Hide submit button;
-    $("#submit-btn").hide()
   }
 });
 
@@ -131,55 +127,48 @@ database.ref().on("child_changed", function (snapshot) {
   console.log('player one', playerOneKey, playerOneChoice)
   console.log('player two', playerTwoKey, playerTwoChoice)
 
-  if (
-    (playerOneChoice === "rock" && playerTwoChoice === "scissors") ||
-    (playerOneChoice === "scissors" && playerTwoChoice === "paper") ||
-    (playerOneChoice === "paper" && playerTwoChoice === "rock")
-  ) {
-    console.log(`${playerOneKey} ${playerOneChoice} wins`)
-    playerOneWins++
-    // Update scoreboard
-    $("#player-one-wins").text(`Player one wins: ${playerOneWins}`)
-    $("#game-message").text(`${playerOneChoice} wins`)
-    // show submit button;
-    $("#submit-btn").show()
-  } else if (playerOneChoice === playerTwoChoice) {
-    console.log("tie")
-    ties++
-    // Update scoreboard
-    $("#ties").text(`Ties: ${ties}`)
-    $("#game-message").text(`Both players selected ${playerTwoChoice}`)
-    // show submit button;
-    $("#submit-btn").show()
+  // Check if both players entered a choice 
+  if (gameObj[playerOneKey] != "" && gameObj[playerTwoKey] != "") {
+    console.log('true')
+    console.log(gameObj[playerOneKey])
+    console.log(gameObj[playerTwoKey])
+
+    if (
+      (playerOneChoice === "rock" && playerTwoChoice === "scissors") ||
+      (playerOneChoice === "scissors" && playerTwoChoice === "paper") ||
+      (playerOneChoice === "paper" && playerTwoChoice === "rock")
+    ) {
+      console.log(`${playerOneKey} ${playerOneChoice} wins`)
+      playerOneWins++
+      // Update scoreboard
+      $("#player-one-wins").text(`Player one wins: ${playerOneWins}`)
+      $("#result-message").text(`${playerOneChoice} wins`)
+    } else if (playerOneChoice === playerTwoChoice) {
+      console.log("tie")
+      ties++
+      // Update scoreboard
+      $("#ties").text(`Ties: ${ties}`)
+      $("#result-message").text(`Both players selected ${playerTwoChoice}`)
+    } else {
+      console.log(`${playerTwoKey} ${playerTwoChoice} wins`)
+      playerTwoWins++
+      // Update scoreboard
+      $("#player-two-wins").text(`Player two wins: ${playerTwoWins}`)
+      $("#result-message").text(`${playerTwoChoice} wins`)
+    };
+
+    console.log('Scoreboard:', playerOneWins, playerTwoWins, ties)
+
+    // Remove player choice from Firebase database
+    console.log('update current path', `${currentPath}/player/choice`)
+
+    database.ref(currentPath + '/player').set({
+      choice: ''
+    });
   } else {
-    console.log(`${playerTwoKey} ${playerTwoChoice} wins`)
-    playerTwoWins++
-    // Update scoreboard
-    $("#player-two-wins").text(`Player two wins: ${playerTwoWins}`)
-    $("#game-message").text(`${playerTwoChoice} wins`)
-    // show submit button;
-    $("#submit-btn").show()
-  };
-
-  console.log('Scoreboard:', playerOneWins, playerTwoWins, ties)
-
-  // Remove player choice from Firebase database
-  console.log('update current path', `${currentPath}/player/choice`)
-  // let location = database.ref(currentPath + '/player')
-  // location.child('choice').update({ child: null })
-  //   .then(function () {
-  //     console.log('successful')
-  //   })
-
-
-  playerOneChoice = null;
-  playerTwoChoice = null;
-  // gameObj = {};
+    console.log('false')
+  }
   console.log('game object', gameObj)
-
-
-
-
 });
 
 

@@ -16,7 +16,8 @@ body {
   font-family: 'Roboto', sans-serif !important;
 }
 
-#game-message {
+#game-message,
+#result-message {
   text-align: center;
   font-size: 2rem;
 }
