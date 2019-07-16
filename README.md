@@ -4,7 +4,7 @@ Rock Paper Scissors online multiplayer game
 ## Select rock, paper, or scissors and compare your selection against the other player.
 
 **Software/libraries used for this application:**  
-JavaScript - for the applications logic  
+JavaScript - for application logic  
 Firebase - to confirm connection and store player selection  
 jQuery - for HTML/DOM manipulation and perform asynchronous HTTP request (AJAX)  
 Bootstrap - for making application responsive  
